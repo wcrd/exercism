@@ -2,8 +2,8 @@ class Clock
   attr_reader :hour, :minute
 
   def initialize(args)
-    div, @minute = minute_parser(args[:minute])
-    @hour = hour_parser(args[:hour], div)
+    time_in_minutes = time_parser(args[:hour], args[:minute])
+    @hour, @minute = time_in_minutes.divmod(60)
   end
 
   def to_s
@@ -15,27 +15,22 @@ class Clock
   end
 
   def +(other)
-    div, @minute = minute_parser(@minute+other.minute)
-    @hour = hour_parser(@hour+other.hour+div)
+    @hour, @minute = time_parser(@hour+other.hour, @minute+other.minute).divmod(60)
     self
   end
   
   def -(other)
-    div, @minute = minute_parser(@minute-other.minute)
-    @hour = hour_parser(@hour-other.hour+div)
+    @hour, @minute = time_parser(@hour-other.hour, @minute-other.minute).divmod(60)
     self
   end
 
 
   private
 
-  def minute_parser(minutes)
-    return minutes.divmod(60) unless minutes.nil?
-    return 0,0
-  end
-
-  def hour_parser(hours, add_hrs=0)
-    hours.nil? ? add_hrs%24 : (hours+add_hrs)%24
+  def time_parser(hours, minutes)
+    time_in_minutes = hours.to_i*60 + minutes.to_i
+    #normalise to 24hrs (1440 minutes)
+    time_in_minutes%1440
   end
 
 end
