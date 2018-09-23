@@ -1,3 +1,4 @@
+# Clock class stores the time in hh:mm 12h format
 class Clock
   attr_reader :hour, :minute
 
@@ -7,7 +8,7 @@ class Clock
   end
 
   def to_s
-    time = "#{format('%02d', @hour)}:#{format('%02d', @minute)}"
+    "#{format('%02d', @hour)}:#{format('%02d', @minute)}"
   end
 
   def ==(other)
@@ -15,22 +16,20 @@ class Clock
   end
 
   def +(other)
-    @hour, @minute = time_parser(@hour+other.hour, @minute+other.minute).divmod(60)
+    @hour, @minute = time_parser(@hour + other.hour, @minute + other.minute).divmod(60)
     self
   end
   
   def -(other)
-    @hour, @minute = time_parser(@hour-other.hour, @minute-other.minute).divmod(60)
+    @hour, @minute = time_parser(@hour - other.hour, @minute - other.minute).divmod(60)
     self
   end
-
 
   private
 
   def time_parser(hours, minutes)
-    time_in_minutes = hours.to_i*60 + minutes.to_i
-    #normalise to 24hrs (1440 minutes)
-    time_in_minutes%1440
+    time_in_minutes = hours.to_i * 60 + minutes.to_i
+    # normalise to 24hrs (1440 minutes)
+    time_in_minutes % 1440
   end
-
 end
